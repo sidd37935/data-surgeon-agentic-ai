@@ -1,19 +1,19 @@
 # 👨‍⚕️ Data Surgeon — Agentic AI Insight Bot
 
-Ek **Streamlit web app** jo aapke CSV data pe "surgery" karta hai — aap plain English/Hindi mein sawal poochte ho (jaise *"top 5 performers dikhao"* ya *"score ka histogram banao"*), aur ek **AI Agent** (LangChain + Groq Llama 3.3) background mein khud Python/Pandas code likh kar us sawal ka jawab deta hai — text mein bhi, aur agar chart mangoge to graph bana kar bhi.
+A **Streamlit web app** that performs "surgery" on your CSV data — you ask questions in plain English (like *"show me the top 5 performers"* or *"create a histogram of the score"*), and an **AI Agent** (LangChain + Groq Llama 3.3) writes Python/Pandas code on its own in the background to answer that question — both as text and, if you ask for a chart, as a graph too.
 
 ---
 
-## 🧠 Ye kaise kaam karta hai (Architecture)
+##  How It Works (Architecture)
 
-1. User CSV file upload karta hai → Pandas se `DataFrame` bana.
-2. `create_pandas_dataframe_agent` (LangChain Experimental) ek **Agentic AI** setup karta hai jo:
-   - User ke question ko samajhta hai
-   - Uske hisaab se khud Pandas code **likhta** hai
-   - Us code ko **execute** karta hai (sandbox mein)
-   - Result ko wapas natural language mein explain karta hai
-3. LLM ke liye **Groq API** (Llama 3.3 70B) use hota hai — ye **free & bahut fast** hai.
-4. Agar query mein "plot/chart/graph/hist/bar" jaisa keyword ho, to Matplotlib se bana graph bhi Streamlit UI mein dikha diya jata hai.
+1. The user uploads a CSV file → Pandas creates a `DataFrame`.
+2. `create_pandas_dataframe_agent` (LangChain Experimental) sets up an **Agentic AI** that:
+   - Understands the user's question
+   - Writes Pandas code on its own based on the question
+   - **Executes** that code (in a sandbox)
+   - Explains the result back in natural language
+3. The **Groq API** (Llama 3.3 70B) is used for the LLM — it's **free and very fast**.
+4. If the query includes a keyword like "plot/chart/graph/hist/bar," a Matplotlib-generated graph is also shown in the Streamlit UI.
 
 ---
 
@@ -23,7 +23,7 @@ Ek **Streamlit web app** jo aapke CSV data pe "surgery" karta hai — aap plain 
 data-surgeon-agentic-ai/
 ├── app.py              # Main Streamlit application
 ├── requirements.txt    # Python dependencies
-├── .env.example         # Env variable ka sample (apni API key yahan daalni hai)
+├── .env.example         # Sample env variable file (add your API key here)
 ├── .gitignore
 ├── .vscode/
 │   └── settings.json
@@ -36,26 +36,26 @@ data-surgeon-agentic-ai/
 
 - **Python 3.10 – 3.13**
 - **VS Code** (with Python extension installed)
-- Ek **free Groq API key** — https://console.groq.com/keys se milegi (sign up free hai)
+- A **free Groq API key** — get it from https://console.groq.com/keys (sign-up is free)
 
 ---
 
-## 🚀 Setup & VS Code me chalane ka pura tareeka
+## 🚀 Setup & How to Run in VS Code
 
-### Step 1 — Project VS Code me kholo
-1. VS Code open karo.
-2. `File → Open Folder` → `data-surgeon-agentic-ai` folder select karo.
-3. Agar Python extension installed nahi hai, to Extensions (`Ctrl+Shift+X`) mein "**Python**" search karke install kar lo (by Microsoft).
+### Step 1 — Open the Project in VS Code
+1. Open VS Code.
+2. `File → Open Folder` → select the `data-surgeon-agentic-ai` folder.
+3. If the Python extension isn't installed, open Extensions (`Ctrl+Shift+X`), search for "**Python**," and install it (by Microsoft).
 
-### Step 2 — Terminal kholo
-VS Code ke andar: `Terminal → New Terminal` (ya shortcut ``Ctrl+` ``)
+### Step 2 — Open the Terminal
+Inside VS Code: `Terminal → New Terminal` (or shortcut ``Ctrl+` ``)
 
-### Step 3 — Virtual environment banao (recommended)
+### Step 3 — Create a Virtual Environment (recommended)
 ```bash
 python -m venv .venv
 ```
 
-Activate karo:
+Activate it:
 - **Windows (PowerShell):**
   ```bash
   .venv\Scripts\activate
@@ -65,41 +65,41 @@ Activate karo:
   source .venv/bin/activate
   ```
 
-Activate hone ke baad terminal ke start mein `(.venv)` dikhega.
+Once activated, you'll see `(.venv)` at the start of the terminal prompt.
 
-> 💡 VS Code niche-right corner mein bhi puchega "Select python interpreter" — usme `.venv` wala interpreter choose kar lena.
+> 💡 VS Code will also prompt "Select python interpreter" in the bottom-right corner — choose the `.venv` interpreter there.
 
-### Step 4 — Dependencies install karo
+### Step 4 — Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
-(Isme thoda time lagega kyunki langchain, faiss jaisi libraries download hongi.)
+(This will take a bit of time since it downloads libraries like langchain, faiss, etc.)
 
-### Step 5 — API Key set karo
-1. `.env.example` file ko copy karke naam `.env` rakho (ya naya `.env` file banao).
-2. Usme apni Groq key daalo:
+### Step 5 — Set Up Your API Key
+1. Copy the `.env.example` file and rename it to `.env` (or create a new `.env` file).
+2. Add your Groq key in it:
    ```
    GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxxxxx
    ```
-3. Key free milti hai yahan se → https://console.groq.com/keys
+3. Get a free key here → https://console.groq.com/keys
 
-> ⚠️ `.env` file kabhi GitHub pe push mat karna — ye already `.gitignore` mein add hai isliye safe hai.
+> ⚠️ Never push the `.env` file to GitHub — it's already added to `.gitignore`, so it's safe.
 
-### Step 6 — App run karo
-Terminal mein:
+### Step 6 — Run the App
+In the terminal:
 ```bash
 streamlit run app.py
 ```
 
-Ye command chalte hi automatically browser mein `http://localhost:8501` open ho jayega jahan app chal rahi hogi.
+As soon as this command runs, the app will automatically open in your browser at `http://localhost:8501`.
 
-### Step 7 — App use karo
-1. Ek CSV file upload karo.
-2. "Surgeon's Console" mein apna question type karo, jaise:
+### Step 7 — Use the App
+1. Upload a CSV file.
+2. Type your question in the "Surgeon's Console," for example:
    - `Who is the top performer in MidTerm_Score?`
    - `Show me a bar chart of average scores by subject`
    - `What is the average age of students?`
-3. Enter dabao — agent khud code likh kar execute karega aur jawab + (agar mangoge to) chart dikhayega.
+3. Press Enter — the agent will write and execute the code on its own and show you the answer + (if requested) a chart.
 
 ---
 
@@ -107,16 +107,16 @@ Ye command chalte hi automatically browser mein `http://localhost:8501` open ho 
 
 | Problem | Solution |
 |---|---|
-| `GROQ_API_KEY nahi mili` error | `.env` file check karo, key sahi se `GROQ_API_KEY=...` format mein honi chahiye, spaces na ho |
-| `ModuleNotFoundError` | Virtual environment activate hai ya nahi check karo, phir dobara `pip install -r requirements.txt` chalao |
-| App slow/error de rahi hai | Groq free tier ki rate limit lag sakti hai — thodi der ruk kar dobara try karo |
-| Chart nahi dikh raha | Query mein "plot", "chart", "graph", "hist", "bar" jaisa keyword include karo |
+| `GROQ_API_KEY not found` error | Check the `.env` file; the key should be in the correct `GROQ_API_KEY=...` format with no spaces |
+| `ModuleNotFoundError` | Check whether the virtual environment is activated, then run `pip install -r requirements.txt` again |
+| App is slow/showing an error | You may have hit Groq's free tier rate limit — wait a bit and try again |
+| Chart isn't showing | Include a keyword like "plot," "chart," "graph," "hist," or "bar" in your query |
 
 ---
 
 ## ⚠️ Security Note
 
-`app.py` mein `allow_dangerous_code=True` set hai — iska matlab agent AI-generated Python code ko **directly execute** karta hai. Ye sirf **learning/personal sandbox** ke liye theek hai. Production ya kisi untrusted user ko is app tak access dene se pehle proper sandboxing (jaise Docker isolation) add karna chahiye.
+`app.py` has `allow_dangerous_code=True` set — this means the agent **directly executes** AI-generated Python code. This is fine only for **learning/personal sandbox** use. Before using this app in production or giving access to any untrusted user, proper sandboxing (like Docker isolation) should be added.
 
 ---
 
