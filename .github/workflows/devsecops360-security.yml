@@ -1,0 +1,32 @@
+name: DevSecOps360 Security
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  semgrep:
+    name: SAST (Semgrep)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    container:
+      image: semgrep/semgrep
+    steps:
+      - uses: actions/checkout@v4
+      - name: Semgrep scan
+        run: semgrep scan --config auto
+  trufflehog:
+    name: Secrets (TruffleHog)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: TruffleHog scan
+        run: docker run --rm -v "$PWD:/repo" trufflesecurity/trufflehog:latest git file:///repo --only-verified --fail
