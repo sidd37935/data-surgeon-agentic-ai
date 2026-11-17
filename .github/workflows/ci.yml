@@ -40,3 +40,25 @@ jobs:
       - uses: actions/checkout@v4
       - name: Semgrep scan
         run: semgrep scan --config auto
+  cyclonedx-sbom:
+    name: SBOM (CycloneDX)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate CycloneDX SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          format: cyclonedx-json
+          artifact-name: sbom.cyclonedx.json
+  checkov:
+    name: IaC (Checkov)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - name: Checkov scan
+        uses: bridgecrewio/checkov-action@v12
+        with:
+          directory: .
+          soft_fail: true
