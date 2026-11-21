@@ -62,3 +62,13 @@ jobs:
         with:
           directory: .
           soft_fail: true
+  trufflehog:
+    name: Secrets (TruffleHog)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: TruffleHog scan
+        run: docker run --rm -v "$PWD:/repo" trufflesecurity/trufflehog:latest git file:///repo --only-verified --fail
